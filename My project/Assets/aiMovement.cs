@@ -8,18 +8,19 @@ public class aiMovement : MonoBehaviour
     public CharacterController CharacterController;
     public GameObject player;
     public GameObject playerParent;
-    bool enemyFollows;
+    int enemyFollows = 1;
+    bool canBeUsed = true;
     // Start is called before the first frame update
     void Start()
     {
-        CharacterController= GetComponent<CharacterController>();
+        CharacterController = GetComponent<CharacterController>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!playerParent.GetComponent<movement>().playerFollows)
+        if (enemyFollows == 1)
         {
             followPlayer();
         }
@@ -45,12 +46,21 @@ public class aiMovement : MonoBehaviour
 
         CharacterController.Move(dir * Time.deltaTime * speed);
     }
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Player") && !enemyFollows)
-    //    {
-    //        player.GetComponent<movement>().playerFollows = false;
-    //        enemyFollows = true;
-    //    }
-    //}
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (canBeUsed && other.CompareTag("Player"))
+        {
+            enemyFollows = Mathf.Abs(enemyFollows - 1);
+            Debug.Log("collided");
+            canBeUsed = false;
+            StartCoroutine(coolDown());
+        }
+    }
+
+    IEnumerator coolDown()
+    {
+        yield return new WaitForSeconds(2);
+        canBeUsed = true;
+    }
 }

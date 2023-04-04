@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class movement : MonoBehaviour
 {
-    public float playerSpeed = 2f;
+    public float playerSpeed = 5f;
     public CharacterController CharacterController;
     public bool playerFollows = false;
     public Transform orientation;
@@ -29,10 +29,10 @@ public class movement : MonoBehaviour
         }
 
     }
-    
+
     //private void OnTriggerEnter(Collider other)
     //{
-    //    if(other.CompareTag("enemy") && !playerFollows)
+    //    if (other.CompareTag("enemy") && !playerFollows)
     //    {
     //        playerFollows = true;
 
