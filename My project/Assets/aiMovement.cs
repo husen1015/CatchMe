@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.Windows;
 public class aiMovement : MonoBehaviour
 {
-    public float speed = 2f;
-    public CharacterController CharacterController;
     public GameObject player;
     public GameObject playerParent;
-    public Animator animator;
+
+    CharacterController CharacterController;
+    Animator animator;
+    float speed = 2f;
     int enemyFollows = 1;
     bool canBeUsed = true;
+    bool shouldWait = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,17 +23,18 @@ public class aiMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (enemyFollows == 1)
-        {
+        if (enemyFollows == 1 && !shouldWait)
             followPlayer();
-        }
-        else
-        {
-            runAway();
-        }
+        
+        else if (enemyFollows == 1 && shouldWait)
+            CharacterController.Move(new Vector3(0, 0, 0));
+
+        else if (enemyFollows == 0)
+            runAway();  
     }
     void followPlayer()
     {
+
         transform.LookAt(player.transform);
         Vector3 dir = player.transform.position - transform.position;
         dir = dir.normalized;
@@ -52,14 +55,25 @@ public class aiMovement : MonoBehaviour
     {
         if (canBeUsed && other.CompareTag("Player"))
         {
+
             enemyFollows = Mathf.Abs(enemyFollows - 1);
-            //float near = (float)(Mathf.Abs(enemyFollows - 1));
             animator.SetInteger("nearr", 1);
             Debug.Log("collided");
             canBeUsed = false;
-
             StartCoroutine(coolDown());
-            //animator.SetInteger("nearr", 0);
+            if (enemyFollows == 1)
+            {
+                shouldWait = true;
+                StartCoroutine(wait());
+
+                playerParent.GetComponent<movement>().setSpeed(3f);
+                speed = 4f;
+            }
+            else
+            {
+                playerParent.GetComponent<movement>().setSpeed(4f);
+                speed = 3f;
+            }
         }
     }
 
@@ -67,5 +81,12 @@ public class aiMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         canBeUsed = true;
+    }
+    IEnumerator wait()
+    {
+        Debug.Log("now stopping");
+
+        yield return new WaitForSeconds(2);
+        shouldWait= false;
     }
 }

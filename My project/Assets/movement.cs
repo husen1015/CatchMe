@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class movement : MonoBehaviour
 {
-    public float playerSpeed = 5f;
     public CharacterController CharacterController;
     public bool playerFollows = false;
     public Transform orientation;
+
+    private float playerSpeed = 5f;
     Vector3 moveDir;
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,10 @@ public class movement : MonoBehaviour
             CharacterController.Move(moveDir * Time.deltaTime *playerSpeed);
         }
 
+    }
+    public void setSpeed(float speed)
+    {
+        playerSpeed = speed;
     }
 
 
