@@ -8,13 +8,14 @@ public class aiMovement : MonoBehaviour
     public CharacterController CharacterController;
     public GameObject player;
     public GameObject playerParent;
+    public Animator animator;
     int enemyFollows = 1;
     bool canBeUsed = true;
     // Start is called before the first frame update
     void Start()
     {
         CharacterController = GetComponent<CharacterController>();
-
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -52,9 +53,13 @@ public class aiMovement : MonoBehaviour
         if (canBeUsed && other.CompareTag("Player"))
         {
             enemyFollows = Mathf.Abs(enemyFollows - 1);
+            //float near = (float)(Mathf.Abs(enemyFollows - 1));
+            animator.SetInteger("nearr", 1);
             Debug.Log("collided");
             canBeUsed = false;
+
             StartCoroutine(coolDown());
+            //animator.SetInteger("nearr", 0);
         }
     }
 

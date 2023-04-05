@@ -30,12 +30,5 @@ public class movement : MonoBehaviour
 
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("enemy") && !playerFollows)
-    //    {
-    //        playerFollows = true;
 
-    //    }
-    //}
 }
